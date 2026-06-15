@@ -272,6 +272,17 @@
     }
     /* Esconde scrollbar mas mantém funcional */
     .step-inner.scrollable::-webkit-scrollbar { display: none; }
+
+    /* ── Imagem de personagem por etapa ── */
+    .step-img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.25);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -290,7 +301,7 @@
         <div class="dot"></div>
       </div>
 
-      <div style="font-size:56px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));">🏎️</div>
+      <img src="Step1.jpeg" alt="" class="step-img">
 
       <div class="greeting">oii, vidaa 💗</div>
 
@@ -314,7 +325,7 @@
         <div class="dot"></div>
       </div>
 
-      <div style="font-size:48px;">📅</div>
+      <img src="Step2.jpeg" alt="" class="step-img">
       <div class="greeting" style="font-size:22px;">quando você tá livre?</div>
 
       <div class="picker-group">
@@ -347,7 +358,7 @@
         <div class="dot"></div>
       </div>
 
-      <div style="font-size:42px;">🍽️</div>
+      <img src="Step3.jpeg" alt="" class="step-img">
       <div class="greeting" style="font-size:20px;">o que tá afim?</div>
       <p style="font-size:13px; color:var(--white-muted);">pode escolher mais de um</p>
 
@@ -404,7 +415,7 @@
         <div class="dot"></div>
       </div>
 
-      <div style="font-size:42px;">✨</div>
+      <img src="Step4.jpeg" alt="" class="step-img">
       <div class="greeting" style="font-size:20px;">qual a vibe?</div>
 
       <div class="cards-grid" id="vibeGrid">
@@ -462,7 +473,7 @@
         <div class="dot active"></div>
       </div>
 
-      <div style="font-size:42px;">🏎️❤️</div>
+      <img src="Step5.jpeg" alt="" class="step-img">
       <div class="greeting" style="font-size:20px;">resumo do nosso date</div>
 
       <div class="summary-card" id="summaryCard">
