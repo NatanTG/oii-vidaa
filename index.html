@@ -543,30 +543,8 @@
   <!-- ── OVERLAY DO NÃO ── -->
   <div class="nao-overlay" id="naoOverlay">
 
-    <!-- Tela 1: tem certeza? -->
-    <div class="nao-screen active" id="naoTela1">
-      <img src="nao.jpeg" alt="" class="nao-img">
-      <div class="nao-text">tem certeza? 😢</div>
-      <div class="nao-sub">pensa bem antes de responder...</div>
-      <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
-        <button class="btn-primary" onclick="naoAvancar(2)">sim, tenho certeza</button>
-        <button class="btn-secondary" onclick="fecharNao()">não era brincadeira! 😅</button>
-      </div>
-    </div>
-
-    <!-- Tela 2: tem certeza absoluta? -->
-    <div class="nao-screen" id="naoTela2">
-      <img src="nao.jpeg" alt="" class="nao-img">
-      <div class="nao-text">tem certeza absoluta?? 😭</div>
-      <div class="nao-sub">oq eu te fiiz?? 💔</div>
-      <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
-        <button class="btn-primary" onclick="naoAvancar(3)">sim, absoluta</button>
-        <button class="btn-secondary" onclick="fecharNao()">vai não, era mentira 🥹</button>
-      </div>
-    </div>
-
-    <!-- Tela 3: motivo -->
-    <div class="nao-screen" id="naoTela3">
+    <!-- Form do motivo -->
+    <div class="nao-screen active" id="naoTela3">
       <img src="nao.jpeg" alt="" class="nao-img">
       <div class="nao-text">tá bom... 😔</div>
       <div class="nao-sub">pelo menos me conta o motivo?</div>
@@ -779,7 +757,6 @@
     // ── Fluxo do Não ──
     function abrirNao() {
       document.getElementById('naoOverlay').classList.add('active');
-      naoAvancar(1);
     }
 
     function fecharNao() {
