@@ -366,7 +366,7 @@
 
       <div style="display:flex; flex-direction:column; gap:12px; width:100%; margin-top:8px;">
         <button class="btn-primary" onclick="goTo(2)">SIM, CLARO! ❤️‍🔥</button>
-        <button class="btn-secondary" id="btnNao" onclick="abrirNao()">Não</button>
+        <button class="btn-secondary" id="btnNao">Não</button>
       </div>
     </div>
   </div>
@@ -619,14 +619,7 @@
     let currentStep = 1;
 
     function goTo(n) {
-      const btnNao = document.getElementById('btnNao');
-      if (btnNao) {
-        btnNao.style.position = '';
-        btnNao.style.left     = '';
-        btnNao.style.top      = '';
-        btnNao.style.width    = '';
-        btnNao.style.zIndex   = '';
-      }
+      resetBtnNao();
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.dot').forEach((d, i) => {
         d.classList.toggle('active', i === n - 1);
@@ -648,56 +641,49 @@
       if (n === 5) renderSummary();
     }
 
-    // ── Botão "Não" que foge ──
+    // ── Botão "Não" que muda de lugar e de texto a cada clique ──
+    const naoMensagens = [
+      'tem certeza? 🥺',
+      'TEM CERTEZA MESMO??',
+      'tem certeza absoluta?? 😭',
+      'oq eu te fiiz?? 💔',
+      'para... me conta o motivo 😔'
+    ];
+    let naoIdx = 0;
+
+    function resetBtnNao() {
+      const btn = document.getElementById('btnNao');
+      if (!btn) return;
+      btn.style.position = '';
+      btn.style.left     = '';
+      btn.style.top      = '';
+      btn.style.width    = '';
+      btn.style.zIndex   = '';
+      btn.textContent    = 'Não';
+      naoIdx = 0;
+    }
+
     (function initBtnNao() {
       const btn = document.getElementById('btnNao');
 
-      // Desktop: detecta proximidade via mousemove no document
-      document.addEventListener('mousemove', function(e) {
-        if (currentStep !== 1) return;
-        const rect = btn.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top  + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (naoIdx < naoMensagens.length) {
           const vw = window.innerWidth;
           const vh = window.innerHeight;
-          const bw = rect.width;
-          const bh = rect.height;
-          // Tenta 5 posições aleatórias e escolhe a mais longe do cursor
-          let bestX = 0, bestY = 0, bestDist = 0;
-          for (let i = 0; i < 5; i++) {
-            const rx = Math.random() * (vw - bw);
-            const ry = Math.random() * (vh - bh);
-            const rdx = e.clientX - (rx + bw / 2);
-            const rdy = e.clientY - (ry + bh / 2);
-            const rd = Math.sqrt(rdx * rdx + rdy * rdy);
-            if (rd > bestDist) { bestDist = rd; bestX = rx; bestY = ry; }
-          }
+          const bw = btn.offsetWidth || 160;
+          const bh = btn.offsetHeight || 48;
           btn.style.position = 'fixed';
-          btn.style.left   = bestX + 'px';
-          btn.style.top    = bestY + 'px';
+          btn.style.left   = (Math.random() * (vw - bw)) + 'px';
+          btn.style.top    = (Math.random() * (vh - bh)) + 'px';
           btn.style.width  = bw + 'px';
           btn.style.zIndex = '10';
+          btn.textContent  = naoMensagens[naoIdx];
+          naoIdx++;
+        } else {
+          abrirNao();
         }
       });
-
-      // Mobile: se move no touchstart antes do toque completar
-      btn.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const rect = btn.getBoundingClientRect();
-        const randX = Math.max(0, Math.min(vw - rect.width,  Math.random() * vw));
-        const randY = Math.max(0, Math.min(vh - rect.height, Math.random() * vh));
-        btn.style.position = 'fixed';
-        btn.style.left = randX + 'px';
-        btn.style.top  = randY + 'px';
-        btn.style.width = rect.width + 'px';
-        btn.style.zIndex = '10';
-      }, { passive: false });
     })();
 
     // ── Validação Etapa 2 ──
@@ -801,6 +787,7 @@
       document.querySelectorAll('.nao-screen').forEach(s => s.classList.remove('active'));
       document.getElementById('naoTela1').classList.add('active');
       document.getElementById('naoMotivo').value = '';
+      resetBtnNao();
     }
 
     function naoAvancar(n) {
