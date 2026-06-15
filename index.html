@@ -786,7 +786,7 @@
         ? new Date(state.date + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
         : '?';
       const vibeText = state.vibe === 'Outro' ? state.vibeCustom : state.vibe;
-      const msg = `oii! vim pelo convite 🏎️❤️\n\n📅 Data: ${dateFormatted}\n⏰ Hora: ${state.time}\n🍽️ Comida: ${state.foods.join(', ')}\n✨ Vibe: ${vibeText}`;
+      const msg = `📅 Data: ${dateFormatted}\n⏰ Hora: ${state.time}\n🍽️ Comida: ${state.foods.join(', ')}\n✨ Vibe: ${vibeText}`;
       const url = 'https://wa.me/5512997428455?text=' + encodeURIComponent(msg);
       window.open(url, '_blank');
     }
