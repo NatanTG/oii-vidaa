@@ -347,6 +347,64 @@
     </div>
   </div>
 
+  <!-- ── ETAPA 4 ── -->
+  <div class="step" id="step4">
+    <div class="step-inner" style="gap:16px;">
+      <div class="progress">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div style="font-size:42px;">✨</div>
+      <div class="greeting" style="font-size:20px;">qual a vibe?</div>
+
+      <div class="cards-grid" id="vibeGrid">
+        <div class="sel-card" data-value="Caminhada" onclick="selectVibe(this)">
+          <span class="card-emoji">🚶</span>
+          <span class="card-label">Caminhada</span>
+        </div>
+        <div class="sel-card" data-value="Cinema" onclick="selectVibe(this)">
+          <span class="card-emoji">🎬</span>
+          <span class="card-label">Cinema</span>
+        </div>
+        <div class="sel-card" data-value="Dança" onclick="selectVibe(this)">
+          <span class="card-emoji">💃</span>
+          <span class="card-label">Dança</span>
+        </div>
+        <div class="sel-card" data-value="Praia" onclick="selectVibe(this)">
+          <span class="card-emoji">🏖️</span>
+          <span class="card-label">Praia</span>
+        </div>
+        <div class="sel-card" data-value="Parque" onclick="selectVibe(this)">
+          <span class="card-emoji">🌳</span>
+          <span class="card-label">Parque</span>
+        </div>
+        <div class="sel-card" data-value="Outro" onclick="selectVibe(this)">
+          <span class="card-emoji">✏️</span>
+          <span class="card-label">Outro</span>
+        </div>
+      </div>
+
+      <!-- Input para "Outro", aparece quando selecionado -->
+      <input
+        type="text"
+        id="vibeCustomInput"
+        class="picker-input"
+        placeholder="conta mais... 💬"
+        style="display:none; margin-top:-4px;"
+        oninput="state.vibeCustom = this.value"
+      >
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goTo(3)">← Voltar</button>
+        <button class="btn-primary"   onclick="advanceStep4()">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ── Estado global ──
     const state = {
@@ -396,6 +454,13 @@
         document.querySelectorAll('#foodGrid .sel-card').forEach(function(card) {
           card.classList.toggle('selected', state.foods.includes(card.dataset.value));
         });
+      }
+      if (n === 4) {
+        document.querySelectorAll('#vibeGrid .sel-card').forEach(function(card) {
+          card.classList.toggle('selected', card.dataset.value === state.vibe);
+        });
+        const customInput = document.getElementById('vibeCustomInput');
+        if (customInput) customInput.style.display = state.vibe === 'Outro' ? 'block' : 'none';
       }
     }
 
@@ -472,6 +537,28 @@
         return;
       }
       goTo(4);
+    }
+
+    // ── Seleção de Vibe (Etapa 4) ──
+    function selectVibe(card) {
+      document.querySelectorAll('#vibeGrid .sel-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.vibe = card.dataset.value;
+      const customInput = document.getElementById('vibeCustomInput');
+      customInput.style.display = state.vibe === 'Outro' ? 'block' : 'none';
+      if (state.vibe !== 'Outro') state.vibeCustom = '';
+    }
+
+    function advanceStep4() {
+      if (!state.vibe) {
+        alert('Escolhe a vibe 💗');
+        return;
+      }
+      if (state.vibe === 'Outro' && !state.vibeCustom.trim()) {
+        alert('Conta o que você quer fazer 💗');
+        return;
+      }
+      goTo(5);
     }
   </script>
 </body>
