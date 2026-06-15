@@ -226,6 +226,38 @@
     /* Card que ocupa 2 colunas */
     .sel-card.full-width { grid-column: 1 / -1; flex-direction: row; gap: 12px; padding: 14px 18px; }
     .sel-card.full-width .card-label { font-size: 14px; }
+
+    /* ── Resumo ── */
+    .summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .summary-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .summary-row .s-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--white-muted);
+    }
+    .summary-row .s-value {
+      font-size: 16px;
+      color: var(--white);
+      font-weight: 600;
+    }
+    .divider {
+      height: 1px;
+      background: var(--card-border);
+    }
   </style>
 </head>
 <body>
@@ -405,6 +437,31 @@
     </div>
   </div>
 
+  <!-- ── ETAPA 5 ── -->
+  <div class="step" id="step5">
+    <div class="step-inner" style="gap:16px;">
+      <div class="progress">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active"></div>
+      </div>
+
+      <div style="font-size:42px;">🏎️❤️</div>
+      <div class="greeting" style="font-size:20px;">resumo do nosso date</div>
+
+      <div class="summary-card" id="summaryCard">
+        <!-- preenchido via JS ao entrar na etapa -->
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goTo(4)">← Voltar</button>
+        <button class="btn-primary"   onclick="finalize()">Finalizar 💌</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ── Estado global ──
     const state = {
@@ -462,6 +519,7 @@
         const customInput = document.getElementById('vibeCustomInput');
         if (customInput) customInput.style.display = state.vibe === 'Outro' ? 'block' : 'none';
       }
+      if (n === 5) renderSummary();
     }
 
     // ── Botão "Não" que foge ──
@@ -562,6 +620,50 @@
         return;
       }
       goTo(5);
+    }
+
+    // ── Renderiza o resumo (Etapa 5) ──
+    function renderSummary() {
+      const card = document.getElementById('summaryCard');
+      const dateFormatted = state.date
+        ? new Date(state.date + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+        : '—';
+      const timeFormatted = state.time || '—';
+      const foodsText = state.foods.length ? state.foods.join(', ') : '—';
+      const vibeText  = state.vibe === 'Outro' ? state.vibeCustom : (state.vibe || '—');
+
+      card.innerHTML = `
+        <div class="summary-row">
+          <span class="s-label">📅 Data</span>
+          <span class="s-value">${dateFormatted}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="summary-row">
+          <span class="s-label">⏰ Horário</span>
+          <span class="s-value">${timeFormatted}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="summary-row">
+          <span class="s-label">🍽️ Comida</span>
+          <span class="s-value">${foodsText}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="summary-row">
+          <span class="s-label">✨ Vibe</span>
+          <span class="s-value">${vibeText}</span>
+        </div>
+      `;
+    }
+
+    // ── Finalizar e enviar via WhatsApp ──
+    function finalize() {
+      const dateFormatted = state.date
+        ? new Date(state.date + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+        : '?';
+      const vibeText = state.vibe === 'Outro' ? state.vibeCustom : state.vibe;
+      const msg = `oii! vim pelo convite 🏎️❤️\n\n📅 Data: ${dateFormatted}\n⏰ Hora: ${state.time}\n🍽️ Comida: ${state.foods.join(', ')}\n✨ Vibe: ${vibeText}`;
+      const url = 'https://wa.me/5512997428455?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
     }
   </script>
 </body>
