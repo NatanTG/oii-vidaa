@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#7b2ff7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>oii, vidaa 💗</title>
   <style>
     :root {
@@ -151,6 +154,7 @@
       width: 100%;
     }
     .btn-secondary:hover { border-color: var(--white-muted); }
+    .btn-secondary:active { opacity: 0.7; }
 
     .btn-row {
       display: flex;
@@ -258,6 +262,16 @@
       height: 1px;
       background: var(--card-border);
     }
+
+    /* Scroll interno para telas pequenas */
+    .step-inner.scrollable {
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 16px;
+    }
+    /* Esconde scrollbar mas mantém funcional */
+    .step-inner.scrollable::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body>
@@ -324,7 +338,7 @@
 
   <!-- ── ETAPA 3 ── -->
   <div class="step" id="step3">
-    <div class="step-inner" style="gap:16px;">
+    <div class="step-inner scrollable" style="gap:16px;">
       <div class="progress">
         <div class="dot"></div>
         <div class="dot"></div>
@@ -381,7 +395,7 @@
 
   <!-- ── ETAPA 4 ── -->
   <div class="step" id="step4">
-    <div class="step-inner" style="gap:16px;">
+    <div class="step-inner scrollable" style="gap:16px;">
       <div class="progress">
         <div class="dot"></div>
         <div class="dot"></div>
@@ -488,6 +502,15 @@
         container.appendChild(h);
       }
     })();
+
+    // Set min date to today
+    document.addEventListener('DOMContentLoaded', function() {
+      const dateInput = document.getElementById('inputDate');
+      if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+      }
+    });
 
     // ── Navegação entre etapas ──
     let currentStep = 1;
