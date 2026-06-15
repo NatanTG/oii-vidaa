@@ -166,7 +166,29 @@
   <!-- Corações animados -->
   <div class="hearts-container" id="heartsContainer"></div>
 
-  <!-- Etapas serão inseridas nas próximas tasks -->
+  <!-- ── ETAPA 1 ── -->
+  <div class="step active" id="step1">
+    <div class="step-inner">
+      <div class="progress">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div style="font-size:56px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));">🏎️</div>
+
+      <div class="greeting">oii, vidaa 💗</div>
+
+      <div class="question">você aceita ir a um date comigo?</div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; width:100%; margin-top:8px;">
+        <button class="btn-primary" onclick="goTo(2)">SIM, CLARO! ❤️‍🔥</button>
+        <button class="btn-secondary" id="btnNao">Não</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // ── Estado global ──
@@ -206,6 +228,49 @@
       document.getElementById('step' + n).classList.add('active');
       currentStep = n;
     }
+
+    // ── Botão "Não" que foge ──
+    (function initBtnNao() {
+      const btn = document.getElementById('btnNao');
+
+      // Desktop: foge do cursor
+      btn.addEventListener('mousemove', function(e) {
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top  + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 80) {
+          const angle = Math.atan2(dy, dx);
+          const flee  = 120;
+          const nx = cx - Math.cos(angle) * flee;
+          const ny = cy - Math.sin(angle) * flee;
+          const clampX = Math.max(0, Math.min(window.innerWidth  - rect.width,  nx - rect.width/2));
+          const clampY = Math.max(0, Math.min(window.innerHeight - rect.height, ny - rect.height/2));
+          btn.style.position = 'fixed';
+          btn.style.left = clampX + 'px';
+          btn.style.top  = clampY + 'px';
+          btn.style.width = rect.width + 'px';
+          btn.style.zIndex = '10';
+        }
+      });
+
+      // Mobile: se move no touchstart antes do toque completar
+      btn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const rect = btn.getBoundingClientRect();
+        const randX = Math.max(0, Math.min(vw - rect.width,  Math.random() * vw));
+        const randY = Math.max(0, Math.min(vh - rect.height, Math.random() * vh));
+        btn.style.position = 'fixed';
+        btn.style.left = randX + 'px';
+        btn.style.top  = randY + 'px';
+        btn.style.width = rect.width + 'px';
+        btn.style.zIndex = '10';
+      }, { passive: false });
+    })();
   </script>
 </body>
 </html>
