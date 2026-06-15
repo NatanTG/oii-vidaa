@@ -392,6 +392,11 @@
       });
       document.getElementById('step' + n).classList.add('active');
       currentStep = n;
+      if (n === 3) {
+        document.querySelectorAll('#foodGrid .sel-card').forEach(function(card) {
+          card.classList.toggle('selected', state.foods.includes(card.dataset.value));
+        });
+      }
     }
 
     // ── Botão "Não" que foge ──
