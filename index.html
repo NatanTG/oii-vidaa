@@ -275,12 +275,9 @@
 
     /* ── Imagem de personagem por etapa ── */
     .step-img {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.25);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+      width: 160px;
+      height: auto;
+      object-fit: contain;
       flex-shrink: 0;
     }
   </style>
@@ -560,25 +557,34 @@
     (function initBtnNao() {
       const btn = document.getElementById('btnNao');
 
-      // Desktop: foge do cursor
-      btn.addEventListener('mousemove', function(e) {
+      // Desktop: detecta proximidade via mousemove no document
+      document.addEventListener('mousemove', function(e) {
+        if (currentStep !== 1) return;
         const rect = btn.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top  + rect.height / 2;
         const dx = e.clientX - cx;
         const dy = e.clientY - cy;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 80) {
-          const angle = Math.atan2(dy, dx);
-          const flee  = 120;
-          const nx = cx - Math.cos(angle) * flee;
-          const ny = cy - Math.sin(angle) * flee;
-          const clampX = Math.max(0, Math.min(window.innerWidth  - rect.width,  nx - rect.width/2));
-          const clampY = Math.max(0, Math.min(window.innerHeight - rect.height, ny - rect.height/2));
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          const bw = rect.width;
+          const bh = rect.height;
+          // Tenta 5 posições aleatórias e escolhe a mais longe do cursor
+          let bestX = 0, bestY = 0, bestDist = 0;
+          for (let i = 0; i < 5; i++) {
+            const rx = Math.random() * (vw - bw);
+            const ry = Math.random() * (vh - bh);
+            const rdx = e.clientX - (rx + bw / 2);
+            const rdy = e.clientY - (ry + bh / 2);
+            const rd = Math.sqrt(rdx * rdx + rdy * rdy);
+            if (rd > bestDist) { bestDist = rd; bestX = rx; bestY = ry; }
+          }
           btn.style.position = 'fixed';
-          btn.style.left = clampX + 'px';
-          btn.style.top  = clampY + 'px';
-          btn.style.width = rect.width + 'px';
+          btn.style.left   = bestX + 'px';
+          btn.style.top    = bestY + 'px';
+          btn.style.width  = bw + 'px';
           btn.style.zIndex = '10';
         }
       });
