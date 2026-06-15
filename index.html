@@ -546,7 +546,10 @@
       state.vibe = card.dataset.value;
       const customInput = document.getElementById('vibeCustomInput');
       customInput.style.display = state.vibe === 'Outro' ? 'block' : 'none';
-      if (state.vibe !== 'Outro') state.vibeCustom = '';
+      if (state.vibe !== 'Outro') {
+        state.vibeCustom = '';
+        customInput.value = '';
+      }
     }
 
     function advanceStep4() {
