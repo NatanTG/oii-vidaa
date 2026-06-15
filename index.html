@@ -159,6 +159,38 @@
     }
     .btn-row .btn-secondary { flex: 1; }
     .btn-row .btn-primary   { flex: 2; }
+
+    /* ── Pickers ── */
+    .picker-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .picker-label {
+      font-size: 13px;
+      color: var(--white-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .picker-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 17px;
+      color: var(--white);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    .picker-input:focus {
+      border-color: rgba(255,255,255,0.4);
+    }
+    /* iOS date/time picker color fix */
+    ::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
   </style>
 </head>
 <body>
@@ -186,6 +218,39 @@
       <div style="display:flex; flex-direction:column; gap:12px; width:100%; margin-top:8px;">
         <button class="btn-primary" onclick="goTo(2)">SIM, CLARO! ❤️‍🔥</button>
         <button class="btn-secondary" id="btnNao">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ETAPA 2 ── -->
+  <div class="step" id="step2">
+    <div class="step-inner">
+      <div class="progress">
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div style="font-size:48px;">📅</div>
+      <div class="greeting" style="font-size:22px;">quando você tá livre?</div>
+
+      <div class="picker-group">
+        <span class="picker-label">Data</span>
+        <input class="picker-input" type="date" id="inputDate"
+               onchange="state.date = this.value">
+      </div>
+
+      <div class="picker-group">
+        <span class="picker-label">Horário</span>
+        <input class="picker-input" type="time" id="inputTime"
+               onchange="state.time = this.value">
+      </div>
+
+      <div class="btn-row" style="margin-top:8px;">
+        <button class="btn-secondary" onclick="goTo(1)">← Voltar</button>
+        <button class="btn-primary"   onclick="advanceStep2()">Próximo →</button>
       </div>
     </div>
   </div>
@@ -279,6 +344,19 @@
         btn.style.zIndex = '10';
       }, { passive: false });
     })();
+
+    // ── Validação Etapa 2 ──
+    function advanceStep2() {
+      const d = document.getElementById('inputDate').value;
+      const t = document.getElementById('inputTime').value;
+      if (!d || !t) {
+        alert('Escolhe a data e o horário 💗');
+        return;
+      }
+      state.date = d;
+      state.time = t;
+      goTo(3);
+    }
   </script>
 </body>
 </html>
